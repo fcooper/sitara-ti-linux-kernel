@@ -2181,15 +2181,17 @@ static int am33xx_evm_tx_clk_dly_phy_fixup(struct phy_device *phydev)
 	return 0;
 }
 
-#define AM33XX_VDD_MPU_OPP50_UV		1100000
+#define AM33XX_VDD_CORE_OPP50_UV		1100000
 #define AM33XX_OPP120_FREQ		600000000
 #define AM33XX_OPPTURBO_FREQ		720000000
 
-#define AM33XX_ES2_0_VDD_MPU_OPP50_UV	950000
+#define AM33XX_ES2_0_VDD_CORE_OPP50_UV	950000
+#define AM33XX_ES2_0_OPP120_FREQ	720000000
 #define AM33XX_ES2_0_OPPTURBO_FREQ	800000000
 #define AM33XX_ES2_0_OPPNITRO_FREQ	1000000000
 
-#define AM33XX_ES2_1_VDD_MPU_OPP50_UV	950000
+#define AM33XX_ES2_1_VDD_CORE_OPP50_UV	950000
+#define AM33XX_ES2_1_OPP120_FREQ	720000000
 #define AM33XX_ES2_1_OPPTURBO_FREQ	800000000
 #define AM33XX_ES2_1_OPPNITRO_FREQ	1000000000
 
@@ -2232,7 +2234,7 @@ static void am335x_opp_update(void)
 		rev = omap_rev();
 		switch (rev) {
 		case AM335X_REV_ES1_0:
-			if (voltage_uv <= AM33XX_VDD_MPU_OPP50_UV) {
+			if (voltage_uv <= AM33XX_VDD_CORE_OPP50_UV) {
 				/*
 				 * disable the higher freqs - we dont care about
 				 * the results
@@ -2242,11 +2244,13 @@ static void am335x_opp_update(void)
 			}
 			break;
 		case AM335X_REV_ES2_0:
-			if (voltage_uv <= AM33XX_ES2_0_VDD_MPU_OPP50_UV) {
+			if (voltage_uv <= AM33XX_ES2_0_VDD_CORE_OPP50_UV) {
 				/*
 				 * disable the higher freqs - we dont care about
 				 * the results
 				 */
+				opp_disable(mpu_dev,
+					    AM33XX_ES2_0_OPP120_FREQ);
 				opp_disable(mpu_dev,
 					    AM33XX_ES2_0_OPPTURBO_FREQ);
 				opp_disable(mpu_dev,
@@ -2256,11 +2260,13 @@ static void am335x_opp_update(void)
 		case AM335X_REV_ES2_1:
 		/* FALLTHROUGH */
 		default:
-			if (voltage_uv <= AM33XX_ES2_1_VDD_MPU_OPP50_UV) {
+			if (voltage_uv <= AM33XX_ES2_1_VDD_CORE_OPP50_UV) {
 				/*
 				 * disable the higher freqs - we dont care about
 				 * the results
 				 */
+				opp_disable(mpu_dev,
+					    AM33XX_ES2_1_OPP120_FREQ);
 				opp_disable(mpu_dev,
 					    AM33XX_ES2_1_OPPTURBO_FREQ);
 				opp_disable(mpu_dev,
