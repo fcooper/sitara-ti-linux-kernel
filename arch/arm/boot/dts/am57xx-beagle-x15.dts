@@ -198,13 +198,6 @@
 };
 
 &dra7_pmx_core {
-	i2c2_pins: pinmux_i2c2_pins {
-		pinctrl-single,pins = <
-			0x408 (PIN_INPUT | MUX_MODE1) /* hdmi1_ddc_scl */
-			0x40c (PIN_INPUT | MUX_MODE1) /* hdmi1_ddc_sda */
-		>;
-	};
-
 	mmc1_pins_default: mmc1_pins_default {
 		pinctrl-single,pins = <
 			0x36c (PIN_INPUT | MUX_MODE14)	/* mmc1sdcd.gpio219 */
@@ -264,43 +257,6 @@
 		>;
 	};
 
-	hdmi_pins: pinmux_hdmi_pins {
-		pinctrl-single,pins = <
-			0x3b0 	(PIN_OUTPUT | MUX_MODE14)	/* gpio7_10 */
-			0x3b8 	(PIN_INPUT | MUX_MODE14)	/* gpio7_12 */
-			0x370 	(PIN_OUTPUT | MUX_MODE14)	/* gpio6_28 */
-		>;
-	};
-
-	clkout2_pins_default: clkout2_pins_default {
-		pinctrl-single,pins = <
-			0x294 (PIN_OUTPUT_PULLDOWN | MUX_MODE9)	/* xref_clk0.clkout2 */
-		>;
-	};
-
-	clkout2_pins_sleep: clkout2_pins_sleep {
-		pinctrl-single,pins = <
-			0x294 (PIN_INPUT | MUX_MODE15)	/* xref_clk0.clkout2 */
-		>;
-	};
-
-	mcasp3_pins_default: mcasp3_pins_default {
-		pinctrl-single,pins = <
-			0x324 (PIN_INPUT_PULLDOWN | MUX_MODE0) /* mcasp3_aclkx.mcasp3_aclkx */
-			0x328 (PIN_INPUT_PULLDOWN | MUX_MODE0) /* mcasp3_fsx.mcasp3_fsx */
-			0x32c (PIN_OUTPUT_PULLDOWN | MUX_MODE0) /* mcasp3_axr0.mcasp3_axr0 */
-			0x330 (PIN_INPUT_PULLDOWN | MUX_MODE0) /* mcasp3_axr1.mcasp3_axr1 */
-		>;
-	};
-
-	mcasp3_pins_sleep: mcasp3_pins_sleep {
-		pinctrl-single,pins = <
-			0x324 (PIN_INPUT | MUX_MODE15)
-			0x328 (PIN_INPUT | MUX_MODE15)
-			0x32c (PIN_INPUT | MUX_MODE15)
-			0x330 (PIN_INPUT | MUX_MODE15)
-		>;
-	};
 };
 
 &i2c1 {
@@ -472,9 +428,6 @@
 	tlv320aic3104: tlv320aic3104@18 {
 		compatible = "ti,tlv320aic3104";
 		reg = <0x18>;
-		pinctrl-names = "default", "sleep";
-		pinctrl-0 = <&clkout2_pins_default>;
-		pinctrl-1 = <&clkout2_pins_sleep>;
 		status = "okay";
 		adc-settle-ms = <40>;
 
@@ -588,8 +541,6 @@
 &hdmi {
 	status = "ok";
 	vdda-supply = <&ldo3_reg>;
-	pinctrl-names = "default";
-	pinctrl-0 = <&hdmi_pins &i2c2_pins>;
 
 	port {
 		hdmi_out: endpoint {
@@ -716,9 +667,6 @@
 };
 
 &mcasp3 {
-	pinctrl-names = "default", "sleep";
-	pinctrl-0 = <&mcasp3_pins_default>;
-	pinctrl-1 = <&mcasp3_pins_sleep>;
 	status = "okay";
 
 	op-mode = <0>;	/* MCASP_IIS_MODE */
@@ -799,13 +747,5 @@
 				  <&gpio_fan THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
 			};
 		};
-	};
-};
-
-&epwmss1 {
-	status = "okay";
-
-	ehrpwm1: ehrpwm@48440200 {
-		status = "okay";
 	};
 };
